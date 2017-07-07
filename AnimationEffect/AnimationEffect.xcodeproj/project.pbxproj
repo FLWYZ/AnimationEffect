@@ -13,6 +13,12 @@
 		880BA56E1F037BEA00B24122 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 880BA56C1F037BEA00B24122 /* Main.storyboard */; };
 		880BA5701F037BEA00B24122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 880BA56F1F037BEA00B24122 /* Assets.xcassets */; };
 		880BA5731F037BEA00B24122 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 880BA5711F037BEA00B24122 /* LaunchScreen.storyboard */; };
+		880BA5811F03836300B24122 /* AEController.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5801F03836300B24122 /* AEController.m */; };
+		880BA5841F0383D300B24122 /* AERunInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5831F0383D300B24122 /* AERunInfo.m */; };
+		880BA5871F03840000B24122 /* AEParam.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5861F03840000B24122 /* AEParam.m */; };
+		880BA58A1F03858900B24122 /* UIView+AnimationEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5891F03858900B24122 /* UIView+AnimationEffect.m */; };
+		880BA58E1F039FB000B24122 /* UIView+AEBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA58D1F039FB000B24122 /* UIView+AEBuilder.m */; };
+		880BA5911F03BCDF00B24122 /* UILabel+AEExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5901F03BCDF00B24122 /* UILabel+AEExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +32,19 @@
 		880BA56F1F037BEA00B24122 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		880BA5721F037BEA00B24122 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		880BA5741F037BEA00B24122 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		880BA57F1F03836300B24122 /* AEController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEController.h; sourceTree = "<group>"; };
+		880BA5801F03836300B24122 /* AEController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEController.m; sourceTree = "<group>"; };
+		880BA5821F0383D300B24122 /* AERunInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AERunInfo.h; sourceTree = "<group>"; };
+		880BA5831F0383D300B24122 /* AERunInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AERunInfo.m; sourceTree = "<group>"; };
+		880BA5851F03840000B24122 /* AEParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEParam.h; sourceTree = "<group>"; };
+		880BA5861F03840000B24122 /* AEParam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEParam.m; sourceTree = "<group>"; };
+		880BA5881F03858900B24122 /* UIView+AnimationEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AnimationEffect.h"; sourceTree = "<group>"; };
+		880BA5891F03858900B24122 /* UIView+AnimationEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AnimationEffect.m"; sourceTree = "<group>"; };
+		880BA58B1F03870D00B24122 /* AEConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEConstants.h; sourceTree = "<group>"; };
+		880BA58C1F039FB000B24122 /* UIView+AEBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AEBuilder.h"; sourceTree = "<group>"; };
+		880BA58D1F039FB000B24122 /* UIView+AEBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AEBuilder.m"; sourceTree = "<group>"; };
+		880BA58F1F03BCDF00B24122 /* UILabel+AEExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+AEExtension.h"; sourceTree = "<group>"; };
+		880BA5901F03BCDF00B24122 /* UILabel+AEExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+AEExtension.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +61,7 @@
 		880BA5571F037BEA00B24122 = {
 			isa = PBXGroup;
 			children = (
+				880BA57A1F037CFB00B24122 /* AnimationEffectLibrary */,
 				880BA5621F037BEA00B24122 /* AnimationEffect */,
 				880BA5611F037BEA00B24122 /* Products */,
 			);
@@ -77,6 +97,26 @@
 				880BA5641F037BEA00B24122 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		880BA57A1F037CFB00B24122 /* AnimationEffectLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				880BA57F1F03836300B24122 /* AEController.h */,
+				880BA5801F03836300B24122 /* AEController.m */,
+				880BA5821F0383D300B24122 /* AERunInfo.h */,
+				880BA5831F0383D300B24122 /* AERunInfo.m */,
+				880BA5851F03840000B24122 /* AEParam.h */,
+				880BA5861F03840000B24122 /* AEParam.m */,
+				880BA5881F03858900B24122 /* UIView+AnimationEffect.h */,
+				880BA5891F03858900B24122 /* UIView+AnimationEffect.m */,
+				880BA58C1F039FB000B24122 /* UIView+AEBuilder.h */,
+				880BA58D1F039FB000B24122 /* UIView+AEBuilder.m */,
+				880BA58F1F03BCDF00B24122 /* UILabel+AEExtension.h */,
+				880BA5901F03BCDF00B24122 /* UILabel+AEExtension.m */,
+				880BA58B1F03870D00B24122 /* AEConstants.h */,
+			);
+			path = AnimationEffectLibrary;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,9 +191,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				880BA58E1F039FB000B24122 /* UIView+AEBuilder.m in Sources */,
 				880BA56B1F037BEA00B24122 /* ViewController.m in Sources */,
+				880BA5871F03840000B24122 /* AEParam.m in Sources */,
+				880BA5911F03BCDF00B24122 /* UILabel+AEExtension.m in Sources */,
 				880BA5681F037BEA00B24122 /* AppDelegate.m in Sources */,
 				880BA5651F037BEA00B24122 /* main.m in Sources */,
+				880BA58A1F03858900B24122 /* UIView+AnimationEffect.m in Sources */,
+				880BA5811F03836300B24122 /* AEController.m in Sources */,
+				880BA5841F0383D300B24122 /* AERunInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +358,7 @@
 				880BA5791F037BEA00B24122 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
