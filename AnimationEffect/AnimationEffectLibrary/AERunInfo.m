@@ -8,132 +8,75 @@
 
 #import "AERunInfo.h"
 #import "AEParam.h"
+#import "AEViewParam.h"
 
 @interface AERunInfo()
 
-@property (assign, nonatomic, readwrite) NSTimeInterval animationStartTimeStamp;
-@property (assign, nonatomic, readwrite) NSTimeInterval animationEndTimeStamp;
+@property (strong, nonatomic, readwrite) AEParam *param;
+@property (assign, nonatomic, readwrite) NSTimeInterval animationPassedTime;
 
 @end
 
 @implementation AERunInfo
 
-- (instancetype)initWithAnimation:(CAAnimation *)animation layer:(CALayer *)animationLayer view:(UIView *)view param:(AEParam *)param {
-    if (self = [super init]) {
-        self.animationView = view;
-        self.animation = animation;
-        self.animationLayer = animationLayer;
-        self.animationStartTimeStamp = param.startTimeStamp;
-        self.animationEndTimeStamp = param.startTimeStamp + param.duration;
-    }
-    return self;
-}
-
-- (void)adjustAnimationPassedTimeOffset:(NSTimeInterval)timeInterval mode:(AEMode)mode {
-    switch (mode) {
-        case AEMode_Ordinary:
-            self.animationPassedTime += timeInterval;
-            break;
-        case AEMode_TimeOffset:
-            self.animationPassedTime = timeInterval;
-            break;
-        default:
-            break;
-    }
-}
-
-- (void (^)(NSTimeInterval, AEMode))animationRunBlock {
-    if (_animationRunBlock == nil) {
-        __weak typeof(self) weakSelf = self;
-        _animationRunBlock = ^(NSTimeInterval timeInterval,AEMode mode){
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf.animationLayer != nil) {
-                [strongSelf adjustAnimationPassedTimeOffset:timeInterval mode:mode];
-                if (strongSelf.animationLayer.timeOffset != strongSelf.animationPassedTime) {
-                    strongSelf.animationLayer.timeOffset = strongSelf.animationPassedTime;
-                }
-            }
-        };
-    }
-    return _animationRunBlock;
-}
-
-@end
-
-@interface AEPartialTextEffectRunInfo()
-
-@property (assign, nonatomic, readwrite) NSRange effectRange;
-@property (assign, nonatomic) CGFloat effectLetterLengthPerSec;
-
-@end
-
-@implementation AEPartialTextEffectRunInfo
-
 - (instancetype)initWithParam:(AEParam *)param {
-    if (self = [super initWithAnimation:nil layer:nil view:nil param:param]) {
-        self.effectRange = param.partialTextEffectRange;
-        self.effectLetterLengthPerSec = self.effectRange.length * 1.0 / param.duration;
+    if (self = [super init]) {
+        self.param = param;
     }
     return self;
 }
 
-- (BOOL)effectValidAtIndex:(NSUInteger)index
-                timeOffset:(NSTimeInterval)currentTimeOffset
-                      mode:(AEMode)mode {
-    NSRange currentEffectRange = self.runtimeEffectRangeBlock(currentTimeOffset,mode);
-    return NSLocationInRange(index, currentEffectRange);
+- (void)configuratePassedTime:(NSTimeInterval)timeOffset {
+    if (self.param.isAutoRun) {
+        self.animationPassedTime += timeOffset;
+    } else {
+        if (timeOffset < self.animationBeginTime) {
+            self.animationPassedTime = 0;
+        } else if (timeOffset > self.animationCompleteTime) {
+            self.animationPassedTime = self.param.duration;
+        } else {
+            self.animationPassedTime = timeOffset;
+        }
+    }
 }
 
-- (NSRange (^)(NSTimeInterval, AEMode))runtimeEffectRangeBlock {
-    if (_runtimeEffectRangeBlock == nil) {
-        __weak typeof(self) weakSelf = self;
-        _runtimeEffectRangeBlock = ^NSRange(NSTimeInterval timeOffset, AEMode mode) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            [strongSelf adjustAnimationPassedTimeOffset:timeOffset mode:mode];
-            if (strongSelf.animationPassedTime < strongSelf.animationStartTimeStamp) {
-                return NSMakeRange(0, 0);
-            } else if (strongSelf.animationStartTimeStamp > strongSelf.animationEndTimeStamp) {
-                return strongSelf.effectRange;
-            } else {
-                NSUInteger effectLength = (strongSelf.animationPassedTime - strongSelf.animationStartTimeStamp) * strongSelf.effectLetterLengthPerSec;
-                return NSMakeRange(strongSelf.effectRange.location, effectLength);
+#pragma mark - setter / getter
+
+- (NSTimeInterval)animationBeginTime {
+    return self.param.beginTimeStamp;
+}
+
+- (NSTimeInterval)animationDuration {
+    return self.param.duration;
+}
+
+- (NSTimeInterval)animationCompleteTime {
+    return self.param.beginTimeStamp + self.param.duration;
+}
+
+@end
+
+@implementation AETextRunInfo
+
+- (void (^)(NSTimeInterval, AEViewParam *))animationRunBlock {
+    return ^(NSTimeInterval timeOffset,AEViewParam *viewParam){
+        NSRange effectRange = self.runtimeEffectRangBlock(timeOffset);
+        if (effectRange.length > 0) {
+            NSMutableAttributedString *applyAttributeString = [[NSMutableAttributedString alloc] initWithString:@""];
+            NSAttributedString *subAttributeString = [viewParam.makeupAttributeString attributedSubstringFromRange:effectRange];
+            for (NSInteger index = 0; index < subAttributeString.length; index++) {
+                NSAttributedString *attributeString = [subAttributeString attributedSubstringFromRange:NSMakeRange(index, 1)];
+                NSMutableDictionary *attribute = [[attributeString attributesAtIndex:0 effectiveRange:nil] mutableCopy];
+                attribute = self.runtimeTextAttributeBlock(attribute);
+                [applyAttributeString appendAttributedString:[[NSAttributedString alloc] initWithString:attributeString.string attributes:attribute]];
             }
-        };
-    }
-    return _runtimeEffectRangeBlock;
+            [viewParam.makeupAttributeString replaceCharactersInRange:effectRange withAttributedString:applyAttributeString];
+        }
+    };
 }
 
-@end
-
-@interface AERunInfoCluster()
-
-@property (strong, nonatomic, readwrite) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
-@property (strong, nonatomic, readwrite) NSMutableArray<__kindof AEPartialTextEffectRunInfo*> *typingRunInfoArray;
-@property (strong, nonatomic, readwrite) NSMutableArray<__kindof AEPartialTextEffectRunInfo*> *partialTextEffectRunInfoArray;
-
-@end
-
-@implementation AERunInfoCluster
-
-- (NSMutableArray<AERunInfo *> *)runInfoArray {
-    if (_runInfoArray == nil) {
-        _runInfoArray = [NSMutableArray array];
-    }
-    return _runInfoArray;
-}
-
-- (NSMutableArray<AEPartialTextEffectRunInfo *> *)typingRunInfoArray {
-    if (_typingRunInfoArray == nil) {
-        _typingRunInfoArray = [NSMutableArray array];
-    }
-    return _typingRunInfoArray;
-}
-
-- (NSMutableArray<AEPartialTextEffectRunInfo *> *)partialTextEffectRunInfoArray {
-    if (_partialTextEffectRunInfoArray == nil) {
-        _partialTextEffectRunInfoArray = [NSMutableArray array];
-    }
-    return _partialTextEffectRunInfoArray;
+- (NSRange)effectRange {
+    return ((AETextSeriesParam *)self.param).effectRange;
 }
 
 @end

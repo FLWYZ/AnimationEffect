@@ -16,6 +16,4 @@
 
 - (AERunInfo *)buildAnimationEffectWithParam:(AEParam *)param;
 
-- (void)applyTextSeriesAnimationEffect:(NSTimeInterval)timeOffset mode:(AEMode)mode;
-
 @end

@@ -19,6 +19,8 @@
 		880BA58A1F03858900B24122 /* UIView+AnimationEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5891F03858900B24122 /* UIView+AnimationEffect.m */; };
 		880BA58E1F039FB000B24122 /* UIView+AEBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA58D1F039FB000B24122 /* UIView+AEBuilder.m */; };
 		880BA5911F03BCDF00B24122 /* UILabel+AEExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 880BA5901F03BCDF00B24122 /* UILabel+AEExtension.m */; };
+		88A4650E1F135ABC00EA217A /* AERunInfoCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A4650D1F135ABC00EA217A /* AERunInfoCluster.m */; };
+		88A465111F135EA000EA217A /* AEViewParam.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A465101F135EA000EA217A /* AEViewParam.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,10 @@
 		880BA58D1F039FB000B24122 /* UIView+AEBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AEBuilder.m"; sourceTree = "<group>"; };
 		880BA58F1F03BCDF00B24122 /* UILabel+AEExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+AEExtension.h"; sourceTree = "<group>"; };
 		880BA5901F03BCDF00B24122 /* UILabel+AEExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+AEExtension.m"; sourceTree = "<group>"; };
+		88A4650C1F135ABB00EA217A /* AERunInfoCluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AERunInfoCluster.h; sourceTree = "<group>"; };
+		88A4650D1F135ABC00EA217A /* AERunInfoCluster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AERunInfoCluster.m; sourceTree = "<group>"; };
+		88A4650F1F135EA000EA217A /* AEViewParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEViewParam.h; sourceTree = "<group>"; };
+		88A465101F135EA000EA217A /* AEViewParam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEViewParam.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,10 +110,14 @@
 			children = (
 				880BA57F1F03836300B24122 /* AEController.h */,
 				880BA5801F03836300B24122 /* AEController.m */,
-				880BA5821F0383D300B24122 /* AERunInfo.h */,
-				880BA5831F0383D300B24122 /* AERunInfo.m */,
 				880BA5851F03840000B24122 /* AEParam.h */,
 				880BA5861F03840000B24122 /* AEParam.m */,
+				88A4650F1F135EA000EA217A /* AEViewParam.h */,
+				88A465101F135EA000EA217A /* AEViewParam.m */,
+				880BA5821F0383D300B24122 /* AERunInfo.h */,
+				880BA5831F0383D300B24122 /* AERunInfo.m */,
+				88A4650C1F135ABB00EA217A /* AERunInfoCluster.h */,
+				88A4650D1F135ABC00EA217A /* AERunInfoCluster.m */,
 				880BA5881F03858900B24122 /* UIView+AnimationEffect.h */,
 				880BA5891F03858900B24122 /* UIView+AnimationEffect.m */,
 				880BA58C1F039FB000B24122 /* UIView+AEBuilder.h */,
@@ -191,6 +201,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A465111F135EA000EA217A /* AEViewParam.m in Sources */,
+				88A4650E1F135ABC00EA217A /* AERunInfoCluster.m in Sources */,
 				880BA58E1F039FB000B24122 /* UIView+AEBuilder.m in Sources */,
 				880BA56B1F037BEA00B24122 /* ViewController.m in Sources */,
 				880BA5871F03840000B24122 /* AEParam.m in Sources */,

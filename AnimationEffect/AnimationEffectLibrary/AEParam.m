@@ -10,26 +10,35 @@
 
 @implementation AEParam
 
-- (instancetype)init {
-    if (self = [super init]) {
-        self.minimumScaling = AEMinimumScalingDefault;
-        self.maximumScaling = AEMaximumScalingDefault;
-        self.rotationDegree = AERotationDegreeDefault;
-        self.wipeDirection = AEWipeDirectionDefault;
-        self.minimumOpacity = AEMinimumOpacityDefault;
-        self.typingMode = AETyping_Letter;
-        self.removAnimationOnCompletion = NO;
-        self.fillMode = kCAFillModeForwards;
-    }
-    return self;
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%lu-%.2f-%.2f-%i-%.2f-%.2f-%.2f",(unsigned long)self.type,self.beginTimeStamp,self.duration,self.removeEffectOnComplete,self.fromValue,self.toValue,self.byValue];
 }
 
-- (NSRange)partialTextEffectRange {
-    return NSMakeRange(self.partialTextStartLetterIndex, self.partialTextEndLetterIndex - self.partialTextStartLetterIndex + 1);
-}
+@end
+
+@implementation AEWipeParam
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%lu-%.2f-%.2f-%.2f-%.2f-%.3f-%lu-%.2f-%lu-%lu-%lu-%@-%@-%i-%@-%@",(unsigned long)self.animationType,self.startTimeStamp,self.duration,self.minimumScaling,self.maximumScaling,self.rotationDegree,(unsigned long)self.wipeDirection,self.minimumOpacity,(unsigned long)self.partialTextStartLetterIndex,(unsigned long)self.partialTextEndLetterIndex,(unsigned long)self.typingMode,self.textNewColor,self.textNewBgColor,self.removAnimationOnCompletion,self.fillMode,NSStringFromRange(self.partialTextEffectRange)];
+    NSString *description = [super description];
+    return [description stringByAppendingFormat:@"-Direction-%lu",(unsigned long)self.direction];
+}
+
+@end
+
+@implementation AERotateParam
+
+- (NSString *)description {
+    NSString *description = [super description];
+    return [description stringByAppendingFormat:@"-Axis-%lu",(unsigned long)self.axis];
+}
+
+@end
+
+@implementation AETextSeriesParam
+
+- (NSString *)description {
+    NSString *description = [super description];
+    return [description stringByAppendingFormat:@"-TypingMode-%lu-EffectRange-%@-TextColor-%@-TextBgColor-%@-TextUnderlineColor-%@",(unsigned long)self.typingMode,NSStringFromRange(self.effectRange),self.textColor,self.textBgColor,self.textUnderlineColor];
 }
 
 @end

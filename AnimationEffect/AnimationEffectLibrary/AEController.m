@@ -75,21 +75,7 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
 - (void)updateAnimation:(NSTimer *)timer {
     __AEThreadSafeCall(^{
         NSTimeInterval currentTimeInterval = 0;
-        switch (self.animationEffectMode) {
-            case AEMode_TimeOffset:
-                currentTimeInterval = self.delegate.currentTimeOffset;
-                break;
-            case AEMode_Ordinary:
-                currentTimeInterval = timer.timeInterval;
-                break;
-            default:
-                break;
-        }
-        for (UIView *AEView in self.animationDic.allValues) {
-            for (<#type *object#> in <#collection#>) {
-                <#statements#>
-            }
-        }
+        
     });
 }
 

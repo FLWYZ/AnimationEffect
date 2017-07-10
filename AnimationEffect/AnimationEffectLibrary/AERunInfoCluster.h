@@ -1,25 +1,22 @@
 //
-//  UIView+AnimationEffect.h
+//  AERunInfoCluster.h
 //  AnimationEffect
 //
-//  Created by fanglei on 2017/6/28.
+//  Created by fanglei on 2017/7/10.
 //  Copyright © 2017年 FangLei. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
-@class AEParam;
 @class AERunInfo;
+@class AETextRunInfo;
 @class AEViewParam;
 
-@interface UIView (AnimationEffect)
+@interface AERunInfoCluster : NSObject
 
 @property (strong, nonatomic, readonly) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
 @property (strong, nonatomic, readonly) AEViewParam *viewParam;
 
-- (AERunInfo *)addAnimationEffect:(AEParam *)param immediately:(BOOL)immdiately;
-
-- (void)removeAnimationEffect:(NSString *)animationKey;
+- (void)bindViewParam:(AEViewParam *)viewParam;
 
 @end

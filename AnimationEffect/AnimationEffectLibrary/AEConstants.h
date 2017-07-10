@@ -15,20 +15,24 @@ typedef NS_ENUM(NSUInteger, AEMode) {
 };
 
 typedef NS_ENUM(NSUInteger, AEType) {
-    AEType_FadeIn,  // 淡入
-    AEType_FadeOut, // 淡出
+    AEType_Default,
+    AEType_FadeIn,  // 渐显
+    AEType_FadeOut, // 渐隐
     AEType_Wipe,    // 擦出
-    AEType_ZoomIn,  // 缩放
+    AEType_ZoomIn,  // 放大
     AEType_ZoomOut, // 缩小
+    AEType_Zoom,    // 缩放
     AEType_Rotate,  // 旋转
     AEType_Spark,   // 闪烁
     AEType_Typing,  // 打字效果
     AEType_ChangeTextColor, // 文字变色
     AEType_ChangeTextBgColor,// 文字背景色变色
-    AEType_Underlining // 下划线
+    AEType_Underlining, // 下划线
+    AEType_Custom
 };
 
 typedef NS_ENUM(NSUInteger, AEWipeDirection) {
+    AEWipe_Default,
     AEWipe_TopToBottom,
     AEWipe_BottomToTop,
     AEWipe_LeadingToTrialing,
@@ -37,7 +41,15 @@ typedef NS_ENUM(NSUInteger, AEWipeDirection) {
     AEWipe_Anticlockwise,
 };
 
+typedef NS_ENUM(NSUInteger, AERotateAxis) {
+    AERotate_Default,
+    AERotate_X,
+    AERotate_Y,
+    AERotate_Z
+};
+
 typedef NS_ENUM(NSUInteger, AETypingMode) {
+    AETyping_Default,
     AETyping_Letter,
     AETyping_Word,
 };

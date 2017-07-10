@@ -11,48 +11,37 @@
 #import "AEConstants.h"
 
 @class AEParam;
+@class AEViewParam;
 
 @interface AERunInfo : NSObject
 
-@property (weak, nonatomic) CALayer *animationLayer;
 @property (weak, nonatomic) UIView *animationView;
-@property (strong, nonatomic) CAAnimation *animation;
-@property (assign, nonatomic, readonly) NSTimeInterval animationStartTimeStamp;
-@property (assign, nonatomic, readonly) NSTimeInterval animationEndTimeStamp;
-@property (copy, nonatomic) void(^animationRunBlock)(NSTimeInterval timeInterval, AEMode mode);
-@property (copy, nonatomic) NSString *animationKey;
-@property (assign, nonatomic) NSTimeInterval animationPassedTime;
+@property (strong, nonatomic, readonly) AEParam *param;
+@property (assign, nonatomic, readonly) NSTimeInterval animationPassedTime;
+@property (assign, nonatomic, readonly) NSTimeInterval animationBeginTime;
+@property (assign, nonatomic, readonly) NSTimeInterval animationCompleteTime;
+@property (assign, nonatomic, readonly) NSTimeInterval animationDuration;
 
-- (instancetype)initWithAnimation:(CAAnimation *)animation
-                            layer:(CALayer *)animationLayer
-                             view:(UIView *)view
-                            param:(AEParam *)param;
-
-- (void)adjustAnimationPassedTimeOffset:(NSTimeInterval)timeInterval mode:(AEMode)mode;
-
-@end
-
-@interface AEPartialTextEffectRunInfo : AERunInfo
-
-@property (weak, nonatomic) UILabel *label;
-@property (assign, nonatomic, readonly) NSRange effectRange;
-@property (copy, nonatomic) NSRange (^runtimeEffectRangeBlock)(NSTimeInterval timeOffset,AEMode mode);
-@property (copy, nonatomic) NSMutableDictionary *(^runtimeTextAttributeBlock)(NSTimeInterval timeOffset, NSMutableDictionary *attribute, AEMode mode);
+@property (copy, nonatomic) void (^animationRunBlock)(NSTimeInterval timeOffset, AEViewParam *viewParam);
 
 - (instancetype)initWithParam:(AEParam *)param;
 
-- (BOOL)effectValidAtIndex:(NSUInteger)index
-                timeOffset:(NSTimeInterval)currentTimeOffset
-                      mode:(AEMode)mode;
-
-- (BOOL)
+- (void)configuratePassedTime:(NSTimeInterval)timeOffset;
 
 @end
 
-@interface AERunInfoCluster : NSObject
+@interface AEWipeRunInfo : AERunInfo
 
-@property (strong, nonatomic, readonly) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
-@property (strong, nonatomic, readonly) NSMutableArray<__kindof AEPartialTextEffectRunInfo*> *typingRunInfoArray;
-@property (strong, nonatomic, readonly) NSMutableArray<__kindof AEPartialTextEffectRunInfo*> *partialTextEffectRunInfoArray;
+@property (strong, nonatomic) CAShapeLayer *wipeLayer;
+
+@end
+
+@interface AETextRunInfo : AERunInfo
+
+@property (assign, nonatomic, readonly) NSRange effectRange;
+
+@property (copy, nonatomic) NSRange (^runtimeEffectRangBlock)(NSTimeInterval timeOffset);
+
+@property (copy, nonatomic) NSMutableDictionary* (^runtimeTextAttributeBlock)(NSMutableDictionary *attribute);
 
 @end
