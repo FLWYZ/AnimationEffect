@@ -22,6 +22,7 @@
 - (instancetype)initWithParam:(AEParam *)param {
     if (self = [super init]) {
         self.param = param;
+        
     }
     return self;
 }
