@@ -22,20 +22,9 @@
  */
 @property (assign, nonatomic) BOOL removeEffectOnComplete;
 
-/**
- default is 1
- */
-@property (assign, nonatomic) CGFloat fromValue;
-
-/**
- default is 1
- */
-@property (assign, nonatomic) CGFloat toValue;
-
-/**
- default is 0
- */
-@property (assign, nonatomic) CGFloat byValue;
+@property (copy, nonatomic) NSNumber* fromValue;
+@property (copy, nonatomic) NSNumber* toValue;
+@property (copy, nonatomic) NSNumber* byValue;
 
 @end
 

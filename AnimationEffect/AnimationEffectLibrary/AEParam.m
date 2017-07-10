@@ -10,17 +10,8 @@
 
 @implementation AEParam
 
-- (instancetype)init {
-    if (self = [super init]) {
-        self.fromValue = 1;
-        self.toValue = 1;
-        self.byValue = 0;
-    }
-    return self;
-}
-
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%lu-%.2f-%.2f-%i-%.2f-%.2f-%.2f",(unsigned long)self.type,self.beginTimeStamp,self.duration,self.removeEffectOnComplete,self.fromValue,self.toValue,self.byValue];
+    return [NSString stringWithFormat:@"%lu-%.2f-%.2f-%i-%@-%@-%@",(unsigned long)self.type,self.beginTimeStamp,self.duration,self.removeEffectOnComplete,self.fromValue,self.toValue,self.byValue];
 }
 
 @end
