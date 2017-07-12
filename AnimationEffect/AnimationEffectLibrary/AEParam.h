@@ -15,7 +15,12 @@
 @property (assign, nonatomic) AEType type;
 @property (assign, nonatomic) NSTimeInterval beginTimeStamp;
 @property (assign, nonatomic) NSTimeInterval duration;
-@property (assign, nonatomic, getter = isAutoRun) BOOL autoRun;
+
+/**
+ 如果设置为 yes，那么动效立刻生效
+ 如果设置为 no，那么动效在到达 beginTimeStamp 的时候生效
+ */
+@property (assign, nonatomic, getter = isRunDirectly) BOOL runDirectly;
 
 /**
  default is NO
@@ -25,6 +30,12 @@
 @property (copy, nonatomic) NSNumber* fromValue;
 @property (copy, nonatomic) NSNumber* toValue;
 @property (copy, nonatomic) NSNumber* byValue;
+
+@property (assign, nonatomic, readonly) CGFloat initialValue;
+@property (assign, nonatomic, readonly) CGFloat terminalValue;
+@property (assign, nonatomic, readonly) CGFloat deltaPerSec;
+
+- (void)prepareValues;
 
 @end
 

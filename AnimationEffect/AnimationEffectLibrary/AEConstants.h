@@ -9,13 +9,7 @@
 #ifndef AEConstants_h
 #define AEConstants_h
 
-typedef NS_ENUM(NSUInteger, AEMode) {
-    AEMode_TimeOffset,
-    AEMode_Ordinary
-};
-
 typedef NS_ENUM(NSUInteger, AEType) {
-    AEType_Default,
     AEType_FadeIn,  // 渐显
     AEType_FadeOut, // 渐隐
     AEType_Wipe,    // 擦出
@@ -32,7 +26,6 @@ typedef NS_ENUM(NSUInteger, AEType) {
 };
 
 typedef NS_ENUM(NSUInteger, AEWipeDirection) {
-    AEWipe_Default,
     AEWipe_TopToBottom,
     AEWipe_BottomToTop,
     AEWipe_LeadingToTrialing,
@@ -42,24 +35,21 @@ typedef NS_ENUM(NSUInteger, AEWipeDirection) {
 };
 
 typedef NS_ENUM(NSUInteger, AERotateAxis) {
-    AERotate_Default,
+    AERotate_Z,
     AERotate_X,
     AERotate_Y,
-    AERotate_Z
 };
 
 typedef NS_ENUM(NSUInteger, AETypingMode) {
-    AETyping_Default,
     AETyping_Letter,
     AETyping_Word,
 };
 
 #pragma mark - default values
-#define AEMinimumScalingDefault (1/1000000.0)
-#define AEMaximumScalingDefault 1.5
-#define AERotationDegreeDefault (M_PI * 2)
-#define AEWipeDirectionDefault AEWipe_Clockwise
-#define AEMinimumOpacityDefault 0.5
-#define AEDefaultTimeInterval 0.1
+#define kAEMinimumScaling (1/1000000.0)
+#define kAEMaximumScaling 2
+#define kAERotationDegree (M_PI * 2)
+#define kAEMinimumOpacity 0.5
+#define kAETimeInterval 0.1
 
 #endif /* AEConstants_h */

@@ -12,7 +12,7 @@
 
 @interface AERunInfoCluster()
 
-@property (strong, nonatomic, readwrite) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
+@property (strong, nonatomic, readwrite) NSMutableDictionary *runInfoDictionary;
 @property (strong, nonatomic, readwrite) AEViewParam *viewParam;
 
 @end
@@ -23,11 +23,15 @@
     self.viewParam = viewParam;
 }
 
-- (NSMutableArray<AERunInfo *> *)runInfoArray {
-    if (_runInfoArray == nil) {
-        _runInfoArray = [NSMutableArray array];
+- (NSMutableDictionary *)runInfoDictionary {
+    if (_runInfoDictionary == nil) {
+        _runInfoDictionary = [NSMutableDictionary dictionary];
     }
-    return _runInfoArray;
+    return _runInfoDictionary;
+}
+
+- (BOOL)hasBindViewParam {
+    return self.viewParam != nil;
 }
 
 @end

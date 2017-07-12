@@ -14,8 +14,9 @@
 
 @interface AERunInfoCluster : NSObject
 
-@property (strong, nonatomic, readonly) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
+@property (strong, nonatomic, readonly) NSMutableDictionary *runInfoDictionary;
 @property (strong, nonatomic, readonly) AEViewParam *viewParam;
+@property (assign, nonatomic, readonly, getter = hasBindViewParam) BOOL bindViewParam;
 
 - (void)bindViewParam:(AEViewParam *)viewParam;
 

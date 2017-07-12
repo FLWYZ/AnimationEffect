@@ -7,6 +7,10 @@
 //
 
 #import "AEController.h"
+#import "AEConstants.h"
+#import "UIView+AnimationEffect.h"
+#import "AERunInfo.h"
+#import "AEViewParam.h"
 
 static inline void __AEThreadSafeCall(void(^action)(void)) {
     dispatch_async(dispatch_get_main_queue(), action);
@@ -15,8 +19,8 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
 @interface AEController()
 
 @property (strong, nonatomic) NSTimer *animationTimer;
-@property (assign, nonatomic, readwrite) AEMode animationEffectMode;
-@property (strong, nonatomic) NSMutableDictionary *animationDic;
+@property (strong, nonatomic) NSMutableArray *animationViews;
+@property (assign, nonatomic) NSTimeInterval timeOffset;
 
 @end
 
@@ -31,42 +35,49 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
     return controller;
 }
 
-- (void)fireWithAEMode:(AEMode)animationEffectMode repeatTimeInterval:(NSTimeInterval)repeatTimeInterval{
+- (void)fire {
     __AEThreadSafeCall(^{
         if (_animationTimer == nil) {
-            _animationEffectMode = animationEffectMode;
-            _animationTimer = [NSTimer scheduledTimerWithTimeInterval:repeatTimeInterval <= 0 ? AEDefaultTimeInterval : repeatTimeInterval target:self selector:@selector(updateAnimation:) userInfo:nil repeats:YES];
+            _animationTimer = [NSTimer scheduledTimerWithTimeInterval:kAETimeInterval target:self selector:@selector(updateAnimation:) userInfo:nil repeats:YES];
             [[NSRunLoop currentRunLoop] addTimer:_animationTimer forMode:NSRunLoopCommonModes];
         }
     });
 }
 
-- (void)invalidate {
+- (void)invalidate:(BOOL)resetTimeOffset removeAllAEView:(BOOL)removeAll {
     __AEThreadSafeCall(^{
         if ([_animationTimer isValid]) {
             [_animationTimer invalidate];
             _animationTimer = nil;
         }
+        if (resetTimeOffset == YES) {
+            self.timeOffset = 0;
+        }
+        if (removeAll) {
+            [self.animationViews removeAllObjects];
+        }
     });
 }
 
-- (void)addAEView:(UIView *)view identify:(NSString *)identify {
+- (void)addAEView:(UIView *)view{
     __AEThreadSafeCall(^{
-        if (self.animationDic[identify] == nil) {
-            self.animationDic[identify] = view;
+        if (view != nil) {
+            [self.animationViews addObject:view];
+        }
+    });
+}
+
+- (void)removeAEView:(UIView *)view {
+    __AEThreadSafeCall(^{
+        if (view != nil && [self.animationViews containsObject:view]) {
+            [self.animationViews removeObject:view];
         }
     });
 }
 
 - (void)removeAllAEView {
     __AEThreadSafeCall(^{
-        [self.animationDic removeAllObjects];
-    });
-}
-
-- (void)removeAEViewWithIdentify:(NSString *)viewIdentify {
-    __AEThreadSafeCall(^{
-        [self.animationDic removeObjectForKey:viewIdentify];
+        [self.animationViews removeAllObjects];
     });
 }
 
@@ -74,22 +85,83 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
 
 - (void)updateAnimation:(NSTimer *)timer {
     __AEThreadSafeCall(^{
-        NSTimeInterval currentTimeInterval = 0;
-        
+        @autoreleasepool {
+            self.timeOffset += timer.timeInterval;
+            NSTimeInterval timeOffset = [self.delegate respondsToSelector:@selector(currentTimeOffset)] ? self.delegate.currentTimeOffset : self.timeOffset;
+            for (UIView *view in self.animationViews) {
+                NSMutableArray *removeAnimationAarray = [NSMutableArray array];
+                AEViewParam *param = [view.viewParam copy];
+                for (AERunInfo *runInfo in view.runInfoDictionary.allValues) {
+                    if ([self removeAnimationBeforeRun:runInfo onView:view timeOffset:timeOffset]) {
+                        [removeAnimationAarray addObject:runInfo];
+                        continue;
+                    }
+                    runInfo.animationPaused = [self pauseAnimationBeforeRun:runInfo onView:view timeOffset:timeOffset];
+                    runInfo.animationRunBlock(timeOffset, timer.timeInterval, param);
+                    if ([self removeAnimationAfterRun:runInfo onView:view timeOffset:timeOffset]) {
+                        [removeAnimationAarray addObject:runInfo];
+                        continue;
+                    }
+                    runInfo.animationPaused = [self pauseAnimationAfterRun:runInfo onView:view timeOffset:timeOffset];
+                }
+                [view applyAnimationEffect:param];
+                [view removeMultiAnimationEffects:removeAnimationAarray];
+            }
+        }
     });
+}
+
+- (BOOL)pauseAnimationBeforeRun:(AERunInfo *)runInfo
+                         onView:(UIView *)view
+                     timeOffset:(NSTimeInterval)timeOffset {
+    if ([self.delegate respondsToSelector:@selector(pauseAnimationBeforeRun:onView:timeOffset:)]) {
+        return [self.delegate pauseAnimationBeforeRun:runInfo onView:view timeOffset:timeOffset];
+    } else {
+        return runInfo.animationPaused;
+    }
+}
+
+- (BOOL)removeAnimationBeforeRun:(AERunInfo *)runInfo
+                          onView:(UIView *)view
+                      timeOffset:(NSTimeInterval)timeOffset {
+    if ([self.delegate respondsToSelector:@selector(removeAnimationBeforeRun:onView:timeOffset:)]) {
+        return [self.delegate removeAnimationBeforeRun:runInfo onView:view timeOffset:timeOffset];
+    }
+    return NO;
+}
+
+- (BOOL)pauseAnimationAfterRun:(AERunInfo *)runInfo
+                        onView:(UIView *)view
+                    timeOffset:(NSTimeInterval)timeOffset {
+    if ([self.delegate respondsToSelector:@selector(pauseAnimationAfterRun:onView:timeOffset:)]) {
+        return [self.delegate pauseAnimationAfterRun:runInfo onView:view timeOffset:timeOffset];
+    }
+    return NO;
+}
+
+- (BOOL)removeAnimationAfterRun:(AERunInfo *)runInfo
+                         onView:(UIView *)view
+                     timeOffset:(NSTimeInterval)timeOffset {
+    if ([self.delegate respondsToSelector:@selector(removeAnimationAfterRun:onView:timeOffset:)]) {
+        return [self.delegate removeAnimationAfterRun:runInfo onView:view timeOffset:timeOffset];
+    }
+    return NO;
 }
 
 #pragma mark - setter/getter
 
-- (NSMutableDictionary *)animationDic {
-    if (_animationDic == nil) {
-        _animationDic = [NSMutableDictionary dictionary];
+- (NSMutableArray *)animationViews {
+    if (_animationViews == nil) {
+        _animationViews = [NSMutableArray array];
     }
-    return _animationDic;
+    return _animationViews;
 }
 
-- (NSArray<NSString *> *)viewIdentifies {
-    return self.animationDic.allKeys;
+- (void)setDelegate:(id<AEControllerProtocol>)delegate {
+    if (delegate != nil && _delegate != delegate) {
+        [self invalidate:YES removeAllAEView:YES];
+    }
+    _delegate = delegate;
 }
 
 @end

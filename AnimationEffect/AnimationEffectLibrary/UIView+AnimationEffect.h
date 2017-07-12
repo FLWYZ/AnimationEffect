@@ -15,11 +15,17 @@
 
 @interface UIView (AnimationEffect)
 
-@property (strong, nonatomic, readonly) NSMutableArray<__kindof AERunInfo*> *runInfoArray;
+@property (strong, nonatomic, readonly) NSMutableDictionary *runInfoDictionary;
 @property (strong, nonatomic, readonly) AEViewParam *viewParam;
 
 - (AERunInfo *)addAnimationEffect:(AEParam *)param immediately:(BOOL)immdiately;
 
-- (void)removeAnimationEffect:(NSString *)animationKey;
+- (void)applyAnimationEffect:(AEViewParam *)viewParam;
+
+- (void)removeAnimationEffect:(AERunInfo *)runInfo;
+
+- (void)removeMultiAnimationEffects:(NSArray *)runInfoArray;
+
+- (void)removeAllAnimationEffect;
 
 @end

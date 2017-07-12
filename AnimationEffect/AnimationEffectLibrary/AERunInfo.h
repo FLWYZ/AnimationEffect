@@ -21,12 +21,13 @@
 @property (assign, nonatomic, readonly) NSTimeInterval animationBeginTime;
 @property (assign, nonatomic, readonly) NSTimeInterval animationCompleteTime;
 @property (assign, nonatomic, readonly) NSTimeInterval animationDuration;
+@property (assign, nonatomic) BOOL animationPaused;
 
-@property (copy, nonatomic) void (^animationRunBlock)(NSTimeInterval timeOffset, AEViewParam *viewParam);
+@property (copy, nonatomic) void (^animationRunBlock)(NSTimeInterval timeOffset, NSTimeInterval timeInterval, AEViewParam *viewParam);
 
 - (instancetype)initWithParam:(AEParam *)param;
 
-- (void)configuratePassedTime:(NSTimeInterval)timeOffset;
+- (void)configuratePassedTime:(NSTimeInterval)timeOffset timeInterval:(NSTimeInterval)timeInterval;
 
 @end
 
@@ -40,8 +41,8 @@
 
 @property (assign, nonatomic, readonly) NSRange effectRange;
 
-@property (copy, nonatomic) NSRange (^runtimeEffectRangBlock)(NSTimeInterval timeOffset);
+@property (copy, nonatomic) NSRange (^runtimeEffectRangBlock)(NSTimeInterval timeOffset, NSTimeInterval timeInterval);
 
-@property (copy, nonatomic) NSMutableDictionary* (^runtimeTextAttributeBlock)(NSMutableDictionary *attribute);
+@property (copy, nonatomic) NSMutableDictionary* (^runtimeAttributeBlock)(NSMutableDictionary *attribute);
 
 @end

@@ -17,4 +17,6 @@
 @property (strong, nonatomic) NSMutableAttributedString *makeupAttributeString;
 @property (strong, nonatomic) NSMutableAttributedString *actualDisplayAttributeString;
 
+- (instancetype)initWithView:(UIView *)view;
+
 @end

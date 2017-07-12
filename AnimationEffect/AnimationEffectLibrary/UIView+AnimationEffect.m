@@ -15,6 +15,7 @@
 #import "AERunInfoCluster.h"
 #import "AEController.h"
 #import "AEConstants.h"
+#import "AEViewParam.h"
 
 static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
 
@@ -28,31 +29,58 @@ static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
 
 - (AERunInfo *)addAnimationEffect:(AEParam *)param
                       immediately:(BOOL)immdiately {
-    
+    if ([self isKindOfClass:[UILabel class]]) {
+        UILabel *label = (UILabel *)self;
+        [label bindOringinalAtrributeString];
+        if ([param isKindOfClass:[AETextSeriesParam class]]) {
+            AETextSeriesParam *textSeriesParam = (AETextSeriesParam *)param;
+            if (textSeriesParam.effectRange.length <= 0 ||
+                textSeriesParam.effectRange.length > label.originalAttributeString.length) {
+                textSeriesParam.effectRange = NSMakeRange(0, label.originalAttributeString.length);
+            }
+        }
+    }
+    if (self.runInfoCluster.hasBindViewParam == NO) {
+        [self.runInfoCluster bindViewParam:[[AEViewParam alloc] initWithView:self]];
+    }
+    AERunInfo *runInfo = [self buildAnimationEffectWithParam:param];
+    if (runInfo != nil) {
+        [self.runInfoDictionary setObject:runInfo forKey:runInfo.description];
+        if (immdiately) {
+            
+        }
+        return runInfo;
+    }
+    return nil;
 }
 
-- (void)removeAnimationEffect {
+- (void)applyAnimationEffect:(AEViewParam *)viewParam {
+    if (CATransform3DEqualToTransform(self.layer.transform, viewParam.transform) == NO) {
+        self.layer.transform = viewParam.transform;
+    }
+    if (self.layer.opacity != viewParam.opacity) {
+        self.layer.opacity = viewParam.opacity;
+    }
+    if ([self isKindOfClass:[UILabel class]]) {
+        if ([((UILabel *)self).attributedText isEqualToAttributedString:viewParam.actualDisplayAttributeString] == NO) {
+            ((UILabel *)self).attributedText = viewParam.actualDisplayAttributeString;
+        }
+    }
+}
+
+- (void)removeAnimationEffect:(AERunInfo *)runInfo {
+    [self.runInfoDictionary removeObjectForKey:runInfo.description];
+}
+
+- (void)removeMultiAnimationEffects:(NSArray *)runInfoArray {
+    for (AERunInfo *runInfo in runInfoArray) {
+        [self removeAnimationEffect:runInfo];
+    }
+}
+
+- (void)removeAllAnimationEffect {
     self.runInfoCluster = nil;
     self.layer.mask = nil;
-}
-
-#pragma mark - setter/getter
-
-- (void)sortAniamtionEffect {
-    
-}
-
-/**
- 需要支持局部文本动效的类型集合
- */
-- (NSArray *)textSeriesEffect {
-    return @[@(AEType_FadeIn),
-             @(AEType_FadeOut),
-             @(AEType_Spark),
-             @(AEType_Typing),
-             @(AEType_ChangeTextColor),
-             @(AEType_ChangeTextBgColor),
-             @(AEType_Underlining)];
 }
 
 #pragma mark - setter/getter
@@ -70,8 +98,8 @@ static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
     return runInfoCluster;
 }
 
-- (NSMutableArray<AERunInfo *> *)runInfoArray {
-    return self.runInfoCluster.runInfoArray;
+- (NSMutableDictionary *)runInfoDictionary {
+    return self.runInfoCluster.runInfoDictionary;
 }
 
 - (AEViewParam *)viewParam {

@@ -14,6 +14,6 @@
 
 @interface UIView (AEBuilder)
 
-- (AERunInfo *)buildAnimationEffectWithParam:(AEParam *)param;
+- (AERunInfo *)buildAnimationEffectWithParam:(AEParam *)param ;
 
 @end

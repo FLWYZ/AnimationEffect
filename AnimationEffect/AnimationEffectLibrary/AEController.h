@@ -8,40 +8,48 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "AEConstants.h"
+
+@class AERunInfo;
 
 @protocol AEControllerProtocol <NSObject>
 
 @optional
+
+/**
+ 如果实现了这个代理方法，当前时间偏量就从代理方法获得；
+ 如果不实现的话，当前时间偏量由 AEController 自行管理
+ */
 @property (assign, nonatomic, readonly) NSTimeInterval currentTimeOffset;
-@property (assign, nonatomic, readonly) BOOL pauseAnimation;
+
+- (BOOL)pauseAnimationBeforeRun:(AERunInfo *)runInfo onView:(UIView *)view timeOffset:(NSTimeInterval)timeOffset;
+
+- (BOOL)removeAnimationBeforeRun:(AERunInfo *)runInfo onView:(UIView *)view timeOffset:(NSTimeInterval)timeOffset;
+
+- (BOOL)pauseAnimationAfterRun:(AERunInfo *)runInfo onView:(UIView *)view timeOffset:(NSTimeInterval)timeOffset;
+
+- (BOOL)removeAnimationAfterRun:(AERunInfo *)runInfo onView:(UIView *)view timeOffset:(NSTimeInterval)timeOffset;
 
 @end
 
 @interface AEController : NSObject
 
-@property (strong, nonatomic, readonly) NSArray<__kindof NSString*> *viewIdentifies;
-
 @property (weak, nonatomic) id<AEControllerProtocol> delegate;
-
-/**
- 动效运行模式，默认是通过不断修改 timeOffset 来实现控制动效。
- 一旦设置了，在动画执行中不能修改
- */
-@property (assign, nonatomic, readonly) AEMode animationEffectMode;
 
 + (instancetype)controller;
 
 /**
- 根据控制模式和出发时间，开启动效。如果 repeatTimeInterval <= 0,则使用默认值 0.1s
+ 开始控制动效
  */
-- (void)fireWithAEMode:(AEMode)animationEffectMode repeatTimeInterval:(NSTimeInterval)repeatTimeInterval;
+- (void)fire;
 
-- (void)invalidate;
+/**
+ 停止动效计时器
+ */
+- (void)invalidate:(BOOL)resetTimeOffset removeAllAEView:(BOOL)removeAll;
 
-- (void)addAEView:(UIView *)view identify:(NSString *)identify;
+- (void)addAEView:(UIView *)view;
 
-- (void)removeAEViewWithIdentify:(NSString *)viewIdentify;
+- (void)removeAEView:(UIView *)view;
 
 - (void)removeAllAEView;
 
