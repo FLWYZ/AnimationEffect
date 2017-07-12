@@ -18,7 +18,7 @@
 @property (strong, nonatomic, readonly) NSMutableDictionary *runInfoDictionary;
 @property (strong, nonatomic, readonly) AEViewParam *viewParam;
 
-- (AERunInfo *)addAnimationEffect:(AEParam *)param immediately:(BOOL)immdiately;
+- (AERunInfo *)addAnimationEffect:(AEParam *)param;
 
 - (void)applyAnimationEffect:(AEViewParam *)viewParam;
 

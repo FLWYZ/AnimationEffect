@@ -11,6 +11,7 @@
 #import "UIView+AnimationEffect.h"
 #import "AERunInfo.h"
 #import "AEViewParam.h"
+#import "AEParam.h"
 
 static inline void __AEThreadSafeCall(void(^action)(void)) {
     dispatch_async(dispatch_get_main_queue(), action);
@@ -54,14 +55,14 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
             self.timeOffset = 0;
         }
         if (removeAll) {
-            [self.animationViews removeAllObjects];
+            [self removeAllAEView];
         }
     });
 }
 
 - (void)addAEView:(UIView *)view{
     __AEThreadSafeCall(^{
-        if (view != nil) {
+        if (view != nil && [self.animationViews containsObject:view] == NO) {
             [self.animationViews addObject:view];
         }
     });
@@ -77,6 +78,9 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
 
 - (void)removeAllAEView {
     __AEThreadSafeCall(^{
+        for (UIView *view in self.animationViews) {
+            [view removeAllAnimationEffect];
+        }
         [self.animationViews removeAllObjects];
     });
 }
@@ -98,7 +102,9 @@ static inline void __AEThreadSafeCall(void(^action)(void)) {
                     }
                     runInfo.animationPaused = [self pauseAnimationBeforeRun:runInfo onView:view timeOffset:timeOffset];
                     runInfo.animationRunBlock(timeOffset, timer.timeInterval, param);
-                    if ([self removeAnimationAfterRun:runInfo onView:view timeOffset:timeOffset]) {
+                    if ([self removeAnimationAfterRun:runInfo onView:view timeOffset:timeOffset] ||
+                        (runInfo.param.removeEffectOnComplete == YES &&
+                         runInfo.animationPassedTime >= runInfo.animationDuration)) {
                         [removeAnimationAarray addObject:runInfo];
                         continue;
                     }

@@ -13,8 +13,12 @@
 @interface AEParam : NSObject
 
 @property (assign, nonatomic) AEType type;
-@property (assign, nonatomic) NSTimeInterval beginTimeStamp;
 @property (assign, nonatomic) NSTimeInterval duration;
+
+/**
+ 动效开始生效时间戳
+ */
+@property (assign, nonatomic) NSTimeInterval beginTimeStamp;
 
 /**
  如果设置为 yes，那么动效立刻生效

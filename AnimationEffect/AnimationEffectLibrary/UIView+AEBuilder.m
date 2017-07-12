@@ -139,6 +139,9 @@ static inline AERunInfo *__AECreateRunInfo(UIView *view ,AEParam *param) {
 }
 
 - (AERunInfo *)buildRotateAnimationEffect:(AEParam *)param {
+    if ([param isKindOfClass:[AERotateParam class]] == NO) {
+        return nil;
+    }
     AERunInfo *runInfo = __AECreateRunInfo(self, param);
     __weak typeof(runInfo) weakRunInfo = runInfo;
     runInfo.animationRunBlock = ^(NSTimeInterval timeOffset,NSTimeInterval timeInterval, AEViewParam *viewParam) {
@@ -166,6 +169,9 @@ static inline AERunInfo *__AECreateRunInfo(UIView *view ,AEParam *param) {
 }
 
 - (AERunInfo *)buildWipeAnimationEffect:(AEParam *)param {
+    if ([param isKindOfClass:[AEWipeParam class]] == NO) {
+        return nil;
+    }
     CAShapeLayer *wipeShapeLayer = [CAShapeLayer layer];
     wipeShapeLayer.frame = self.bounds;
     wipeShapeLayer.fillColor = [UIColor clearColor].CGColor;

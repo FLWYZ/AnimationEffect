@@ -27,8 +27,7 @@ static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
 
 @implementation UIView (AnimationEffect)
 
-- (AERunInfo *)addAnimationEffect:(AEParam *)param
-                      immediately:(BOOL)immdiately {
+- (AERunInfo *)addAnimationEffect:(AEParam *)param {
     if ([self isKindOfClass:[UILabel class]]) {
         UILabel *label = (UILabel *)self;
         [label bindOringinalAtrributeString];
@@ -46,9 +45,7 @@ static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
     AERunInfo *runInfo = [self buildAnimationEffectWithParam:param];
     if (runInfo != nil) {
         [self.runInfoDictionary setObject:runInfo forKey:runInfo.description];
-        if (immdiately) {
-            
-        }
+        [[AEController controller] addAEView:self];
         return runInfo;
     }
     return nil;

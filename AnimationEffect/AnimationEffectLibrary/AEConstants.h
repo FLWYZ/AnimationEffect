@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, AETypingMode) {
 };
 
 #pragma mark - default values
+
 #define kAEMinimumScaling (1/1000000.0)
 #define kAEMaximumScaling 2
 #define kAERotationDegree (M_PI * 2)

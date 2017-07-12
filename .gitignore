@@ -1,0 +1,29 @@
+.DS_Store
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+profile
+xcuserdata
+*.orig
+HJCPlayerExample/Lesson/
+HJCPlayerExample/test/
+HJCPlayerExample/v4-lesson
+HJCPlayerExample/HJCPlayerExample/ocs5-test_lesson
+v5-lesson
+HJCPlayerExample/jp50/
+*.xcworkspace
+
+# CocoaPods
+Pods
+Podfile.lock
+
+# AppCode
+.idea/
+
+#InjectionCode
+iOSInjectionProject/
+*.save
+
+*.swp
