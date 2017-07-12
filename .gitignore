@@ -5,7 +5,7 @@ build/
 *.mode2v3
 *.perspectivev3
 profile
-xcuserdata
+.xcuserdata
 *.orig
 HJCPlayerExample/Lesson/
 HJCPlayerExample/test/

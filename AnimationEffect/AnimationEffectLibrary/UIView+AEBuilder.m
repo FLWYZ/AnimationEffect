@@ -292,7 +292,10 @@ static inline AERunInfo *__AECreateRunInfo(UIView *view ,AEParam *param) {
         AETextRunInfo *textRunInfo = __AECreateTextRunInfo(self, param);
         textRunInfo.runtimeEffectRangBlock = [self runtimeTextRangType2:textRunInfo];
         textRunInfo.runtimeAttributeBlock = ^NSMutableDictionary *(NSMutableDictionary *attribute) {
-            attribute[NSForegroundColorAttributeName] = ((AETextSeriesParam *)param).textColor;
+            UIColor *textColor = ((AETextSeriesParam *)param).textColor;
+            if (textColor != nil) {
+                attribute[NSForegroundColorAttributeName] = textColor;
+            }
             return attribute;
         };
         return textRunInfo;
@@ -305,7 +308,10 @@ static inline AERunInfo *__AECreateRunInfo(UIView *view ,AEParam *param) {
         AETextRunInfo *textRunInfo = __AECreateTextRunInfo(self, param);
         textRunInfo.runtimeEffectRangBlock = [self runtimeTextRangType2:textRunInfo];
         textRunInfo.runtimeAttributeBlock = ^NSMutableDictionary *(NSMutableDictionary *attribute) {
-            attribute[NSBackgroundColorAttributeName] = ((AETextSeriesParam *)param).textBgColor;
+            UIColor *textBgColor = ((AETextSeriesParam *)param).textBgColor;
+            if (textBgColor != nil) {
+                attribute[NSBackgroundColorAttributeName] = textBgColor;
+            }
             return attribute;
         };
         return textRunInfo;

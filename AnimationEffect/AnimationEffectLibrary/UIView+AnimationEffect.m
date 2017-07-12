@@ -42,6 +42,7 @@ static void *kAERunInfoClusterKey = &kAERunInfoClusterKey;
     if (self.runInfoCluster.hasBindViewParam == NO) {
         [self.runInfoCluster bindViewParam:[[AEViewParam alloc] initWithView:self]];
     }
+    [param prepareValues];
     AERunInfo *runInfo = [self buildAnimationEffectWithParam:param];
     if (runInfo != nil) {
         [self.runInfoDictionary setObject:runInfo forKey:runInfo.description];
